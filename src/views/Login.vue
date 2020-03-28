@@ -1,12 +1,12 @@
 <template>
   <div class="home">
-    <el-form label-width="80px" class="el-form" :model="from" :rules="rules" ref="from">
+    <el-form label-width="80px" class="el-form" status-icon :model="from" :rules="rules" ref="from">
       <img src="../assets/logo.png" alt="" class="img-top">
       <el-form-item label="帐号：" prop='username'>
-        <el-input type="text" v-model="from.username"/>
+        <el-input type="text" v-model="from.username" placeholder="请输入用户名" />
       </el-form-item>
       <el-form-item label="密码：" prop="password">
-        <el-input type="password" v-model="from.password" @keyup.enter.native="handleClickEnter" />
+        <el-input type="password" v-model="from.password" @keyup.enter.native="handleClickEnter" placeholder="请输入密码" />
       </el-form-item>
       <el-form-item>
         <el-button type="success" plain @click="handleClickEnter">登录</el-button>
@@ -42,7 +42,6 @@ export default {
       try {
         await this.$refs.from.validate()
         const { data, meta } = await this.$axios.post('login', this.from)
-        console.log(data, meta)
         if (meta.status === 400) {
           this.$message({
             message: meta.msg,
@@ -52,12 +51,14 @@ export default {
         if (meta.status === 200) {
           this.$message({
             message: meta.msg,
-            type: 'success'
+            type: 'success',
+            showClose: true,
+            duration: 1111
           })
           // 保存token
           localStorage.setItem('token', data.token)
           // 跳转到首页
-          this.$router.push('home')
+          this.$router.push('/home')
         }
       } catch (err) {
         this.$message({
